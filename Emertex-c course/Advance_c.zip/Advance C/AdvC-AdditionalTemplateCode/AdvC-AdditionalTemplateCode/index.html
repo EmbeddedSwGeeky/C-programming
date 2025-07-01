@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <meta name="Author" content="Made by 'tree'">
+ <meta name="GENERATOR" content="$Version: $ tree v1.7.0 (c) 1996 - 2014 by Steve Baker, Thomas Moore, Francesc Rocher, Florian Sesser, Kyosuke Tokoro $">
+ <title>Advanced C Programming - Templates</title>
+ <style type="text/css">
+  <!-- 
+  BODY { font-family : ariel, monospace, sans-serif; }
+  P { font-weight: normal; font-family : ariel, monospace, sans-serif; color: black; background-color: transparent;}
+  B { font-weight: normal; color: black; background-color: transparent;}
+  A:visited { font-weight : normal; text-decoration : none; background-color : transparent; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
+  A:link    { font-weight : normal; text-decoration : none; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
+  A:hover   { color : #000000; font-weight : normal; text-decoration : underline; background-color : yellow; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
+  A:active  { color : #000000; font-weight: normal; background-color : transparent; margin : 0px 0px 0px 0px; padding : 0px 0px 0px 0px; display: inline; }
+  .VERSION { font-size: small; font-family : arial, sans-serif; }
+  .NORM  { color: black;  background-color: transparent;}
+  .FIFO  { color: purple; background-color: transparent;}
+  .CHAR  { color: yellow; background-color: transparent;}
+  .DIR   { color: blue;   background-color: transparent;}
+  .BLOCK { color: yellow; background-color: transparent;}
+  .LINK  { color: aqua;   background-color: transparent;}
+  .SOCK  { color: fuchsia;background-color: transparent;}
+  .EXEC  { color: green;  background-color: transparent;}
+  -->
+ </style>
+</head>
+<body>
+	<h1>Advanced C Programming - Templates</h1><p>
+	<a class="NORM" href=".">.</a><br>
+	├── <a class="DIR" href="./Arrays/">Arrays</a><br>
+	│   ├── <a class="DIR" href="./Arrays/2D_array/">2D_array</a><br>
+	│   │   ├── <a class="DIR" href="./Arrays/2D_array/ArrayCreation/">ArrayCreation</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ArrayCreation/1_row_static.c">1_row_static.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ArrayCreation/2D_passing_dynamic_array.c">2D_passing_dynamic_array.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ArrayCreation/both_dynamic.c">both_dynamic.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Arrays/2D_array/ArrayCreation/column_static.c">column_static.c</a><br>
+	│   │   ├── <a class="DIR" href="./Arrays/2D_array/Buggy/">Buggy</a><br>
+	│   │   │   └── <a class="NORM" href="./Arrays/2D_array/Buggy/wrong_2D_array_passing_1.c">wrong_2D_array_passing_1.c</a><br>
+	│   │   ├── <a class="DIR" href="./Arrays/2D_array/Classwork/">Classwork</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/Classwork/min_of_max_2D_array.c">min_of_max_2D_array.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/Classwork/min_of_max_2D_array_optimized.c">min_of_max_2D_array_optimized.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Arrays/2D_array/Classwork/min_of_max_2D_array_optimized_perfect.c">min_of_max_2D_array_optimized_perfect.c</a><br>
+	│   │   ├── <a class="DIR" href="./Arrays/2D_array/ParamPassing/">ParamPassing</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_array_passing_1.c">2D_array_passing_1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_array_passing.c">2D_array_passing.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_param_col_fixed.c">2D_param_col_fixed.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_param_easy.c">2D_param_easy.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_passing_dynamic_array.c">2D_passing_dynamic_array.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Arrays/2D_array/ParamPassing/2D_passing_prototypes.c">2D_passing_prototypes.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/1_ptr_to_array.c">1_ptr_to_array.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/2D_basic_usage.c">2D_basic_usage.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/2D_basic_usage.s">2D_basic_usage.s</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/2D_init.c">2D_init.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/array_address_1.c">array_address_1.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/array_address.c">array_address.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/array_intepretation.c">array_intepretation.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/array_of_pointers.c">array_of_pointers.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/input.txt">input.txt</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/2D_array/ptr_to_array_2D.c">ptr_to_array_2D.c</a><br>
+	│   │   └── <a class="NORM" href="./Arrays/2D_array/ptr_to_array.c">ptr_to_array.c</a><br>
+	│   ├── <a class="DIR" href="./Arrays/Classwork/">Classwork</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/Classwork/array_average.c">array_average.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/Classwork/largest_in_array.c">largest_in_array.c</a><br>
+	│   │   ├── <a class="NORM" href="./Arrays/Classwork/reverse_array2.c">reverse_array2.c</a><br>
+	│   │   └── <a class="NORM" href="./Arrays/Classwork/reverse_array.c">reverse_array.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/1_array.c">1_array.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/2_array_address.c">2_array_address.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/2_array_init.c">2_array_init.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array2_scan.c">array2_scan.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array2_scanf.c">array2_scanf.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array3.c">array3.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array_address.c">array_address.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array_address_difference.c">array_address_difference.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/array_out_of_bounds.c">array_out_of_bounds.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/copy_array_fail.c">copy_array_fail.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/copy_array_loop.c">copy_array_loop.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/new.c">new.c</a><br>
+	│   ├── <a class="NORM" href="./Arrays/scanf.c">scanf.c</a><br>
+	│   └── <a class="NORM" href="./Arrays/seg_fault.c">seg_fault.c</a><br>
+	├── <a class="DIR" href="./Basics/">Basics</a><br>
+	│   ├── <a class="DIR" href="./Basics/Conditionals/">Conditionals</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Conditionals/Classwork/">Classwork</a><br>
+	│   │   │   ├── <a class="DIR" href="./Basics/Conditionals/Classwork/Loops/">Loops</a><br>
+	│   │   │   │   ├── <a class="EXEC" href="./Basics/Conditionals/Classwork/Loops/power_of_2_series">power_of_2_series</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/power_of_2_series.c">power_of_2_series.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/power_of_2_series_for.c">power_of_2_series_for.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/power_of_n_series.c">power_of_n_series.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/print_stars1.c">print_stars1.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/sum_natural.c">sum_natural.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Basics/Conditionals/Classwork/Loops/sum_natural_for.c">sum_natural_for.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/chech_for_A.c">chech_for_A.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/check_char.c">check_char.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/check_char_TBO.c">check_char_TBO.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/even_odd.c">even_odd.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/even_odd_optimized.c">even_odd_optimized.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/grade2.c">grade2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/grade.c">grade.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/grade_TBO.c">grade_TBO.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/max_of_2.c">max_of_2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/max_of_2_method2.c">max_of_2_method2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/max_of_3.c">max_of_3.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/max_of_3_nested_if.c">max_of_3_nested_if.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Classwork/middle_number.c">middle_number.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Conditionals/Classwork/toggle_case.c">toggle_case.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Conditionals/Loops/">Loops</a><br>
+	│   │   │   ├── <a class="DIR" href="./Basics/Conditionals/Loops/Break-Continue/">Break-Continue</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_3.c">break_3.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break.c">break.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_flag.c">break_flag.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_incorrect.c">break_incorrect.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_loop_terminate.c">break_loop_terminate.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_nested.c">break_nested.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/break_usage2.c">break_usage2.c</a><br>
+	│   │   │   │   ├── <a class="EXEC" href="./Basics/Conditionals/Loops/Break-Continue/cont">cont</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/continue2.c">continue2.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/continue.c">continue.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/do_while_cont.c">do_while_cont.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/prime_check_problem2.c">prime_check_problem2.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/prime_check_problem.c">prime_check_problem.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/prime_check_problem_for.c">prime_check_problem_for.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Basics/Conditionals/Loops/Break-Continue/while_cont.c">while_cont.c</a><br>
+	│   │   │   ├── <a class="DIR" href="./Basics/Conditionals/Loops/Classwork/">Classwork</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Classwork/1_power_of_2_series.c">1_power_of_2_series.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Classwork/1_power_of_2_series_using_for.c">1_power_of_2_series_using_for.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Classwork/2_power_of_n_series.c">2_power_of_n_series.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/Classwork/3_product_using_loop.c">3_product_using_loop.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Basics/Conditionals/Loops/Classwork/3_product_using_loop_while.c">3_product_using_loop_while.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/do_while_0.c">do_while_0.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/do_while_ex1.c">do_while_ex1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/do_while_ex2.c">do_while_ex2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/for_ex1.c">for_ex1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/for_ex2.c">for_ex2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/nested_for1.c">nested_for1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/nested_while1.c">nested_while1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/nested_while2.c">nested_while2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/prime_nos.c">prime_nos.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/while_ex1.c">while_ex1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Conditionals/Loops/while_ex2.c">while_ex2.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Conditionals/Loops/while_ex3.c">while_ex3.c</a><br>
+	│   │   └── <a class="DIR" href="./Basics/Conditionals/SingleConditionals/">SingleConditionals</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/calc_requirement.txt">calc_requirement.txt</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/char_check.c">char_check.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_elif.c">if_elif.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_else_ex1.c">if_else_ex1.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_else_ex1.s">if_else_ex1.s</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_else_ex2.c">if_else_ex2.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_else_ex3.c">if_else_ex3.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_ex1.c">if_ex1.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/if_integer_condition.c">if_integer_condition.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/range_check.c">range_check.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch1.c">switch1.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch2_float.c">switch2_float.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch3_not_constant.c">switch3_not_constant.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch4_default_position.c">switch4_default_position.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch_calc.c">switch_calc.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Basics/Conditionals/SingleConditionals/switch_char_check.c">switch_char_check.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/DataTypes/">DataTypes</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/DataTypes/Sign/">Sign</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/DataTypes/Sign/1_signed_unsigned.c">1_signed_unsigned.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/1_char.c">1_char.c</a><br>
+	│   │   ├── <a class="EXEC" href="./Basics/DataTypes/1_sizeof.c">1_sizeof.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/2_read_char.c">2_read_char.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/2_sizeof.c">2_sizeof.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/3_char_ascii_val.c">3_char_ascii_val.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/3_ignore_newline.c">3_ignore_newline.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/char_ascii_val.c">char_ascii_val.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/char_ascii_val_digits.c">char_ascii_val_digits.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/escape_vals.c">escape_vals.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/print_vals.c">print_vals.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/signed_unsigned.c">signed_unsigned.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/sum.c">sum.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/sum_float.c">sum_float.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/DataTypes/sum_float_scanf.c">sum_float_scanf.c</a><br>
+	│   │   └── <a class="NORM" href="./Basics/DataTypes/sum_scanf.c">sum_scanf.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Goto/">Goto</a><br>
+	│   │   └── <a class="NORM" href="./Basics/Goto/goto_loop.c">goto_loop.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Numbers/">Numbers</a><br>
+	│   │   └── <a class="NORM" href="./Basics/Numbers/1_binary_rep.c">1_binary_rep.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Operators/">Operators</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Arithmetic/">Arithmetic</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/celcius2farenheit.c">celcius2farenheit.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/celcius2farenheit_incorrect.c">celcius2farenheit_incorrect.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/input_output_example.c">input_output_example.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/input_output_example.s">input_output_example.s</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/int_input_output_example.s">int_input_output_example.s</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/precedence_arith.c">precedence_arith.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/pre_post_inc1.c">pre_post_inc1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/pre_post_inc2.c">pre_post_inc2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/pre_post_inc3.c">pre_post_inc3.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Arithmetic/pre_post_inc4.c">pre_post_inc4.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Arithmetic/pre_post_inc5.c">pre_post_inc5.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Bitwise/">Bitwise</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/get_bit.c">get_bit.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/get_set_clear_bits.c">get_set_clear_bits.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/left_shift.c">left_shift.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/masking.c">masking.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/print_bits.c">print_bits.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/right_shift.c">right_shift.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/shift_example.c">shift_example.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/shift_example_direct_print.c">shift_example_direct_print.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/shift_example_int.c">shift_example_int.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/signed_right_shift.c">signed_right_shift.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Bitwise/swap_nibble.c">swap_nibble.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Bitwise/swap_nibble_inc.c">swap_nibble_inc.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Classwork/">Classwork</a><br>
+	│   │   │   └── <a class="DIR" href="./Basics/Operators/Classwork/Bitwise/">Bitwise</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/Classwork/Bitwise/count_bits_2.c">count_bits_2.c</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/Classwork/Bitwise/count_bits_3_optimized.c">count_bits_3_optimized.c</a><br>
+	│   │   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Basics/Operators/Classwork/Bitwise/count_bits.c">count_bits.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Comma/">Comma</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Comma/comma1.c">comma1.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Comma/comma_template.c">comma_template.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Conditional/">Conditional</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Conditional/abs_ternary.c">abs_ternary.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Conditional/max_ternary.c">max_ternary.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Conditional/ternary_assignment.c">ternary_assignment.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Logical/">Logical</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Logical/logical_and_or.c">logical_and_or.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Logical/not_operator.c">not_operator.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Logical/true_false.c">true_false.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Precedence/">Precedence</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Precedence/prec1.c">prec1.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Precedence/prec2.c">prec2.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Relational/">Relational</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Relational/compare.c">compare.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Relational/float_compare.c">float_compare.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Relational/relational1.c">relational1.c</a><br>
+	│   │   ├── <a class="DIR" href="./Basics/Operators/Sizeof/">Sizeof</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Sizeof/sizeof_compile_time.c">sizeof_compile_time.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Sizeof/unsigned_vs_signed2.c">unsigned_vs_signed2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Basics/Operators/Sizeof/unsigned_vs_signed.c">unsigned_vs_signed.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Basics/Operators/Sizeof/u_sizeof_compile_time.c">u_sizeof_compile_time.c</a><br>
+	│   │   └── <a class="DIR" href="./Basics/Operators/TypePromotion/">TypePromotion</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/signed_unsigned.c">signed_unsigned.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/signed_unsigned_sizeof_compare.c">signed_unsigned_sizeof_compare.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/signed_unsigned_sizeof_compare_fixed.c">signed_unsigned_sizeof_compare_fixed.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/sign_extension.c">sign_extension.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/temp.c">temp.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/unsigned_negative.c">unsigned_negative.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Operators/TypePromotion/unsigned_print.c">unsigned_print.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Basics/Operators/TypePromotion/u_signed_unsigned.c">u_signed_unsigned.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Overflow/">Overflow</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/Overflow/char_overflow.c">char_overflow.c</a><br>
+	│   │   └── <a class="NORM" href="./Basics/Overflow/int_max.c">int_max.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Qualifiers-1/">Qualifiers-1</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/Qualifiers-1/const1.c">const1.c</a><br>
+	│   │   ├── <a class="EXEC" href="./Basics/Qualifiers-1/non_register">non_register</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/Qualifiers-1/non_register.c">non_register.c</a><br>
+	│   │   ├── <a class="EXEC" href="./Basics/Qualifiers-1/register1">register1</a><br>
+	│   │   └── <a class="NORM" href="./Basics/Qualifiers-1/register1.c">register1.c</a><br>
+	│   ├── <a class="DIR" href="./Basics/Qualifiers-2/">Qualifiers-2</a><br>
+	│   │   └── <a class="DIR" href="./Basics/Qualifiers-2/Volatile/">Volatile</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/2_volatile.c">2_volatile.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/2_volatile.s">2_volatile.s</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/loop_opt_bak.s">loop_opt_bak.s</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/loop_opt.c">loop_opt.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/loop_opt_not.s">loop_opt_not.s</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Basics/Qualifiers-2/Volatile/loop_opt.s">loop_opt.s</a><br>
+	│   ├── <a class="DIR" href="./Basics/Statements/">Statements</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/Statements/empty2.c">empty2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Basics/Statements/empty.c">empty.c</a><br>
+	│   │   └── <a class="NORM" href="./Basics/Statements/empty.s">empty.s</a><br>
+	│   ├── <a class="NORM" href="./Basics/file2.txt">file2.txt</a><br>
+	│   ├── <a class="NORM" href="./Basics/file.txt">file.txt</a><br>
+	│   └── <a class="NORM" href="./Basics/save.txt">save.txt</a><br>
+	├── <a class="DIR" href="./Files/">Files</a><br>
+	│   ├── <a class="NORM" href="./Files/1.2_fgets_cat.c">1.2_fgets_cat.c</a><br>
+	│   ├── <a class="NORM" href="./Files/1_cat.c">1_cat.c</a><br>
+	│   ├── <a class="NORM" href="./Files/1_read_and_print.c">1_read_and_print.c</a><br>
+	│   ├── <a class="NORM" href="./Files/2.0_copy_file.c">2.0_copy_file.c</a><br>
+	│   ├── <a class="NORM" href="./Files/2_copy_file.c">2_copy_file.c</a><br>
+	│   ├── <a class="NORM" href="./Files/2_cp_no_err_handling.c">2_cp_no_err_handling.c</a><br>
+	│   ├── <a class="NORM" href="./Files/3_text_vs_binary_save.c">3_text_vs_binary_save.c</a><br>
+	│   ├── <a class="NORM" href="./Files/4_seek_example.c">4_seek_example.c</a><br>
+	│   ├── <a class="NORM" href="./Files/ascii_read.c">ascii_read.c</a><br>
+	│   ├── <a class="NORM" href="./Files/ascii_write.c">ascii_write.c</a><br>
+	│   ├── <a class="NORM" href="./Files/binary_file">binary_file</a><br>
+	│   ├── <a class="NORM" href="./Files/binary_read.c">binary_read.c</a><br>
+	│   ├── <a class="NORM" href="./Files/binary_write.c">binary_write.c</a><br>
+	│   ├── <a class="NORM" href="./Files/biodata.dat">biodata.dat</a><br>
+	│   ├── <a class="NORM" href="./Files/biodata.txt">biodata.txt</a><br>
+	│   ├── <a class="NORM" href="./Files/data.txt">data.txt</a><br>
+	│   ├── <a class="NORM" href="./Files/file">file</a><br>
+	│   ├── <a class="NORM" href="./Files/hello.txt">hello.txt</a><br>
+	│   ├── <a class="NORM" href="./Files/non_ascii.c">non_ascii.c</a><br>
+	│   └── <a class="NORM" href="./Files/text_file">text_file</a><br>
+	├── <a class="DIR" href="./Functions/">Functions</a><br>
+	│   ├── <a class="DIR" href="./Functions/Makefile-Project/">Makefile-Project</a><br>
+	│   │   └── <a class="DIR" href="./Functions/Makefile-Project/Project/">Project</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Functions/Makefile-Project/Project/average.c">average.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Functions/Makefile-Project/Project/average.h">average.h</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Functions/Makefile-Project/Project/main.c">main.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Functions/Makefile-Project/Project/Makefile">Makefile</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Functions/Makefile-Project/Project/sum.h">sum.h</a><br>
+	│   ├── <a class="DIR" href="./Functions/Part1/">Part1</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/Basics/">Basics</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/average3.c">average3.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/farenheit_to_celcius.c">farenheit_to_celcius.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func1.c">func1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func1_global.c">func1_global.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func1_global.s">func1_global.s</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func1_local.c">func1_local.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func1_static.c">func1_static.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func2_fixed.c">func2_fixed.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func3.c">func3.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func3_global.c">func3_global.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func4.c">func4.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func4_void.c">func4_void.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part1/Basics/func_global">func_global</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/func_prototype.c">func_prototype.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/global_local.c">global_local.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/is_even.c">is_even.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/is_prime.c">is_prime.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/is_prime_for.c">is_prime_for.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/local_multiple.c">local_multiple.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/modify_inc.c">modify_inc.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/modify_inc_same_name.c">modify_inc_same_name.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/modify_ret.c">modify_ret.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/printf_proto.c">printf_proto.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/print_line.c">print_line.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/README.txt">README.txt</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/same_param_name.c">same_param_name.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/sqrt.c">sqrt.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/static1.c">static1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/sum.c">sum.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Basics/sum.s">sum.s</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/Basics/void_if.c">void_if.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/ClassWork/">ClassWork</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/ClassWork/average_array_ptr.c">average_array_ptr.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/ClassWork/average.c">average.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part1/ClassWork/buggy">buggy</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/ClassWork/buggy.c">buggy.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/ClassWork/core">core</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/ExitStatus/">ExitStatus</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/ExitStatus/div_by_zero.c">div_by_zero.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/ExitStatus/exit_from_func.c">exit_from_func.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/ExitStatus/main_return.c">main_return.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/Linking/">Linking</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Linking/print_without_header.c">print_without_header.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/Linking/sqrt.c">sqrt.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/PassByReference/">PassByReference</a><br>
+	│   │   │   ├── <a class="DIR" href="./Functions/Part1/PassByReference/ArrayAsArgs/">ArrayAsArgs</a><br>
+	│   │   │   │   ├── <a class="DIR" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/">PointerArithmetic</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/array_access_using_ptr2.c">array_access_using_ptr2.c</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/array_access_using_ptr3.c">array_access_using_ptr3.c</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/array_access_using_ptr.c">array_access_using_ptr.c</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/ptr_arithmetic1.c">ptr_arithmetic1.c</a><br>
+	│   │   │   │   │   └── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/PointerArithmetic/quiz1.c">quiz1.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_arg1.c">array_arg1.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_arg2.c">array_arg2.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_arg3.c">array_arg3.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_interpretations.c">array_interpretations.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_passing_in.c">array_passing_in.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/array_passing_in_macro.c">array_passing_in_macro.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/average_array.c">average_array.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/copying_arrays_not_allowed.c">copying_arrays_not_allowed.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/largest_in_array.c">largest_in_array.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/print_array.c">print_array.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/print_array_simple.c">print_array_simple.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/prog1.c">prog1.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/sq_array.c">sq_array.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/sum_array.c">sum_array.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Functions/Part1/PassByReference/ArrayAsArgs/wrong_array_arg1.c">wrong_array_arg1.c</a><br>
+	│   │   │   ├── <a class="DIR" href="./Functions/Part1/PassByReference/BasicPointers/">BasicPointers</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/BasicPointers/rule1.c">rule1.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Functions/Part1/PassByReference/BasicPointers/rule2.c">rule2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/pass_by_ref1.c">pass_by_ref1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/square_cube.c">square_cube.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/square_cube_incorrect.c">square_cube_incorrect.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/square_cube_prb.c">square_cube_prb.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/square_val.c">square_val.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/sum_prod.c">sum_prod.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/swap.c">swap.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/PassByReference/swap_incorrect.c">swap_incorrect.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/PassByReference/swap_prb.c">swap_prb.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/Prototype/">Prototype</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/Prototype/fn_prototype_need.c">fn_prototype_need.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/Recursion/">Recursion</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/fact_loop.c">fact_loop.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/factorial.c">factorial.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/main_recurse.c">main_recurse.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/prb1.c">prb1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/prb2.c">prb2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/prb3.c">prb3.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/prb4.c">prb4.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/print_hello.c">print_hello.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/print_hello_loop.c">print_hello_loop.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/quiz_links.txt">quiz_links.txt</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/quiz_links.txt~">quiz_links.txt~</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/Recursion/recursion_no_base_condition.c">recursion_no_base_condition.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/Recursion/recursion_sum.c">recursion_sum.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/StaticLocal/">StaticLocal</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/StaticLocal/block_var2.c">block_var2.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/StaticLocal/block_var.c">block_var.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part1/StaticLocal/local_flag.c">local_flag.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/StaticLocal/static_assign.c">static_assign.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part1/UsingBuiltins/">UsingBuiltins</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part1/UsingBuiltins/ctype_ex1.c">ctype_ex1.c</a><br>
+	│   │   ├── <a class="NORM" href="./Functions/Part1/average_dynamic.c">average_dynamic.c</a><br>
+	│   │   ├── <a class="NORM" href="./Functions/Part1/default_prototype.c">default_prototype.c</a><br>
+	│   │   └── <a class="NORM" href="./Functions/Part1/local_return.c">local_return.c</a><br>
+	│   ├── <a class="DIR" href="./Functions/Part2/">Part2</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part2/Extern/">Extern</a><br>
+	│   │   │   ├── <a class="DIR" href="./Functions/Part2/Extern/ExternWithHeaders/">ExternWithHeaders</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/ExternWithHeaders/main.c">main.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/ExternWithHeaders/math.c">math.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/ExternWithHeaders/math.h">math.h</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Functions/Part2/Extern/ExternWithHeaders/test.c">test.c</a><br>
+	│   │   │   ├── <a class="DIR" href="./Functions/Part2/Extern/SimpleExternFunction/">SimpleExternFunction</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/SimpleExternFunction/main.c">main.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/SimpleExternFunction/math.c">math.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Functions/Part2/Extern/SimpleExternFunction/test.c">test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/main.c">main.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/math.c">math.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/math.h">math.h</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/Extern/test.c">test.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part2/Extern/test.h">test.h</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/">FuncPtrs</a><br>
+	│   │   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/">BubbleSort</a><br>
+	│   │   │   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/">Derivation</a><br>
+	│   │   │   │   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/">Step1</a><br>
+	│   │   │   │   │   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/Includes/">Includes</a><br>
+	│   │   │   │   │   │   │   └── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/Includes/bubble_sort.h">bubble_sort.h</a><br>
+	│   │   │   │   │   │   └── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/Sources/">Sources</a><br>
+	│   │   │   │   │   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/Sources/bubble_sort.c">bubble_sort.c</a><br>
+	│   │   │   │   │   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/Step1/Sources/main.c">main.c</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/bubble_sort.c">bubble_sort.c</a><br>
+	│   │   │   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/bubble_sort.h">bubble_sort.h</a><br>
+	│   │   │   │   │   └── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Derivation/test_bbsort.c">test_bbsort.c</a><br>
+	│   │   │   │   ├── <a class="DIR" href="./Functions/Part2/FuncPtrs/BubbleSort/Standard/">Standard</a><br>
+	│   │   │   │   │   └── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/Standard/sort.c">sort.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/bubble_sort_bak.c">bubble_sort_bak.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/bubble_sort.c">bubble_sort.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/bubble_sort.h">bubble_sort.h</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Functions/Part2/FuncPtrs/BubbleSort/test_bbsort.c">test_bbsort.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/1_basic.c">1_basic.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/2_cube.c">2_cube.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/3_map.c">3_map.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/4_atexit_optional.c">4_atexit_optional.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/atexit_bak.c">atexit_bak.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/bubble_sort_bak.c">bubble_sort_bak.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/bubble_sort.c">bubble_sort.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/bubble_sort.h">bubble_sort.h</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/command_map">command_map</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/func_address.c">func_address.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/qsort_1.c">qsort_1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/qsort.c">qsort.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/qsort_int.c">qsort_int.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/FuncPtrs/switch_example.c">switch_example.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part2/FuncPtrs/test_bbsort.c">test_bbsort.c</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part2/MainArgs/">MainArgs</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/MainArgs/atoi.c">atoi.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part2/MainArgs/average">average</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/MainArgs/average_incorrect.c">average_incorrect.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part2/MainArgs/cmd_avg">cmd_avg</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/MainArgs/cmd_avg.c">cmd_avg.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part2/MainArgs/demo">demo</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/MainArgs/env_demo.c">env_demo.c</a><br>
+	│   │   │   ├── <a class="EXEC" href="./Functions/Part2/MainArgs/main_args_demo">main_args_demo</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/MainArgs/main_args_demo.c">main_args_demo.c</a><br>
+	│   │   │   └── <a class="EXEC" href="./Functions/Part2/MainArgs/test">test</a><br>
+	│   │   ├── <a class="DIR" href="./Functions/Part2/VarArgs/">VarArgs</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/VarArgs/my_printf.c">my_printf.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Functions/Part2/VarArgs/sprintf.c">sprintf.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Functions/Part2/VarArgs/var_args_mean.c">var_args_mean.c</a><br>
+	│   │   └── <a class="NORM" href="./Functions/Part2/array_interpretation.c">array_interpretation.c</a><br>
+	│   ├── <a class="DIR" href="./Functions/TestFuncs/">TestFuncs</a><br>
+	│   │   ├── <a class="NORM" href="./Functions/TestFuncs/ex1.c">ex1.c</a><br>
+	│   │   └── <a class="NORM" href="./Functions/TestFuncs/test_program.sh">test_program.sh</a><br>
+	│   ├── <a class="NORM" href="./Functions/pointer_types.c">pointer_types.c</a><br>
+	│   └── <a class="NORM" href="./Functions/sum_inline.c">sum_inline.c</a><br>
+	├── <a class="DIR" href="./IO/">IO</a><br>
+	│   ├── <a class="DIR" href="./IO/Buffering/">Buffering</a><br>
+	│   │   ├── <a class="DIR" href="./IO/Buffering/InputBuffer/">InputBuffer</a><br>
+	│   │   │   ├── <a class="NORM" href="./IO/Buffering/InputBuffer/1_scanf_char.c">1_scanf_char.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./IO/Buffering/InputBuffer/1_scanf_char_fixed.c">1_scanf_char_fixed.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./IO/Buffering/InputBuffer/2_buffer_input.c">2_buffer_input.c</a><br>
+	│   │   │   └── <a class="NORM" href="./IO/Buffering/InputBuffer/buffer_int.c">buffer_int.c</a><br>
+	│   │   └── <a class="DIR" href="./IO/Buffering/OutputBuffer/">OutputBuffer</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Buffering/OutputBuffer/0_print.c">0_print.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Buffering/OutputBuffer/1_print_hello.c">1_print_hello.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Buffering/OutputBuffer/2_print_hello_newline.c">2_print_hello_newline.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Buffering/OutputBuffer/3_print_hello_flush.c">3_print_hello_flush.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Buffering/OutputBuffer/4_print_hello_terminate.c">4_print_hello_terminate.c</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./IO/Buffering/OutputBuffer/5_buffer_full.c">5_buffer_full.c</a><br>
+	│   ├── <a class="DIR" href="./IO/Classwork/">Classwork</a><br>
+	│   │   ├── <a class="NORM" href="./IO/Classwork/percent_buggy.c">percent_buggy.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/Classwork/percent.c">percent.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/Classwork/percent_discard.c">percent_discard.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/Classwork/print_upper.c">print_upper.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/Classwork/print_upper_v2.c">print_upper_v2.c</a><br>
+	│   ├── <a class="DIR" href="./IO/EOF_concept/">EOF_concept</a><br>
+	│   │   ├── <a class="NORM" href="./IO/EOF_concept/buggy.c">buggy.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/EOF_concept/buggy_fixed.c">buggy_fixed.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/EOF_concept/read_chars.c">read_chars.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/EOF_concept/uchar_vs_int.c">uchar_vs_int.c</a><br>
+	│   ├── <a class="DIR" href="./IO/EscapeSequence/">EscapeSequence</a><br>
+	│   │   ├── <a class="NORM" href="./IO/EscapeSequence/esacpe.c">esacpe.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/EscapeSequence/print_dir_path.c">print_dir_path.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/EscapeSequence/test_form_feed.c">test_form_feed.c</a><br>
+	│   ├── <a class="DIR" href="./IO/FormatSpecifier/">FormatSpecifier</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/char_ascii.c">char_ascii.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/char_ascii.s">char_ascii.s</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/file">file</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/flag_format.c">flag_format.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/float.c">float.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/float_quiz1.c">float_quiz1.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/format_width.c">format_width.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/percent_print.c">percent_print.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/print_star_width.c">print_star_width.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/FormatSpecifier/scan_star.c">scan_star.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/FormatSpecifier/simple_width.c">simple_width.c</a><br>
+	│   ├── <a class="DIR" href="./IO/IntTypes/">IntTypes</a><br>
+	│   │   └── <a class="NORM" href="./IO/IntTypes/int_types.c">int_types.c</a><br>
+	│   ├── <a class="DIR" href="./IO/Regex/">Regex</a><br>
+	│   │   └── <a class="NORM" href="./IO/Regex/get_name_id.c">get_name_id.c</a><br>
+	│   ├── <a class="DIR" href="./IO/ReturnValue/">ReturnValue</a><br>
+	│   │   ├── <a class="EXEC" href="./IO/ReturnValue/013_example.c">013_example.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/ReturnValue/char_space.c">char_space.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/ReturnValue/print_ret_quiz.c">print_ret_quiz.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/ReturnValue/scanf_int.c">scanf_int.c</a><br>
+	│   │   ├── <a class="NORM" href="./IO/ReturnValue/scanf_int_eat_whitespace.c">scanf_int_eat_whitespace.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/ReturnValue/scanf_return.c">scanf_return.c</a><br>
+	│   ├── <a class="DIR" href="./IO/StringIO/">StringIO</a><br>
+	│   │   ├── <a class="NORM" href="./IO/StringIO/basic_string_io.c">basic_string_io.c</a><br>
+	│   │   └── <a class="NORM" href="./IO/StringIO/gets_vs_fgets.c">gets_vs_fgets.c</a><br>
+	│   └── <a class="DIR" href="./IO/Syscall/">Syscall</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Syscall/out">out</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Syscall/print_fail.c">print_fail.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./IO/Syscall/print_fail_simple.c">print_fail_simple.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="EXEC" href="./IO/Syscall/read_write">read_write</a><br>
+	│   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./IO/Syscall/read_write.c">read_write.c</a><br>
+	├── <a class="DIR" href="./Misc/">Misc</a><br>
+	│   ├── <a class="NORM" href="./Misc/indentation.c">indentation.c</a><br>
+	│   ├── <a class="NORM" href="./Misc/indentation_jumbled.c">indentation_jumbled.c</a><br>
+	│   └── <a class="NORM" href="./Misc/test.c">test.c</a><br>
+	├── <a class="DIR" href="./Pointers/">Pointers</a><br>
+	│   ├── <a class="DIR" href="./Pointers/Basics/">Basics</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/ptr1.c">ptr1.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/ptr2.c">ptr2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/ptr3.c">ptr3.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/rule1.c">rule1.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/rule2_address_op.c">rule2_address_op.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Basics/rule2_both.c">rule2_both.c</a><br>
+	│   │   └── <a class="NORM" href="./Pointers/Basics/rule3.c">rule3.c</a><br>
+	│   ├── <a class="DIR" href="./Pointers/Misc/">Misc</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Misc/dangling_ex2.c">dangling_ex2.c</a><br>
+	│   │   └── <a class="NORM" href="./Pointers/Misc/leak.c">leak.c</a><br>
+	│   ├── <a class="DIR" href="./Pointers/Part2/">Part2</a><br>
+	│   │   ├── <a class="DIR" href="./Pointers/Part2/ConstPointer/">ConstPointer</a><br>
+	│   │   │   └── <a class="NORM" href="./Pointers/Part2/ConstPointer/const.c">const.c</a><br>
+	│   │   ├── <a class="DIR" href="./Pointers/Part2/DynamicMemory/">DynamicMemory</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/dynamic_array.c">dynamic_array.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/dynamic_array_calloc.c">dynamic_array_calloc.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/dynamic_mem.c">dynamic_mem.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/dynamic_mem_realloc.c">dynamic_mem_realloc.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/local_return.c">local_return.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/realloc_cw.c">realloc_cw.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/strdup.c">strdup.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/DynamicMemory/sum_array.c">sum_array.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Pointers/Part2/DynamicMemory/use_strdup.c">use_strdup.c</a><br>
+	│   │   ├── <a class="DIR" href="./Pointers/Part2/MultiLevelPointers/">MultiLevelPointers</a><br>
+	│   │   │   ├── <a class="DIR" href="./Pointers/Part2/MultiLevelPointers/Quiz/">Quiz</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/Quiz/array_part_init.c">array_part_init.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/Quiz/test2.c">test2.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/Quiz/test3.c">test3.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/Quiz/test.c">test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/1_basic_multi_ptrs.c">1_basic_multi_ptrs.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/2_multlevel.c">2_multlevel.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Pointers/Part2/MultiLevelPointers/3_alloc_array.c">3_alloc_array.c</a><br>
+	│   │   ├── <a class="DIR" href="./Pointers/Part2/VoidPointer/">VoidPointer</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/swap_generic.c">swap_generic.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/swap_generic_problem.c">swap_generic_problem.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/swap_generic_stub.c">swap_generic_stub.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/void_not_allowed.c">void_not_allowed.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/void_not_allowed_fixed.c">void_not_allowed_fixed.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/void_ptr_basics1.c">void_ptr_basics1.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Pointers/Part2/VoidPointer/void_ptr_basics2.c">void_ptr_basics2.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Pointers/Part2/VoidPointer/void_ptr_basics.c">void_ptr_basics.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Part2/char_array.c">char_array.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Part2/endian2.c">endian2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Part2/endian.c">endian.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Part2/endianess_concept.c">endianess_concept.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/Part2/null_ptr.c">null_ptr.c</a><br>
+	│   │   └── <a class="NORM" href="./Pointers/Part2/uninitialized_ptr.c">uninitialized_ptr.c</a><br>
+	│   ├── <a class="DIR" href="./Pointers/PointerArithmetic/">PointerArithmetic</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/array_interpretation_address.c">array_interpretation_address.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/array_ptr_relation.c">array_ptr_relation.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/pointer_arithmetic1.c">pointer_arithmetic1.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/pointer_arithmetic2.c">pointer_arithmetic2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/pointer_arithmetic3_array_print.c">pointer_arithmetic3_array_print.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/pointer_arithmetic3.c">pointer_arithmetic3.c</a><br>
+	│   │   ├── <a class="NORM" href="./Pointers/PointerArithmetic/quiz1.c">quiz1.c</a><br>
+	│   │   └── <a class="NORM" href="./Pointers/PointerArithmetic/quiz2.c">quiz2.c</a><br>
+	│   ├── <a class="DIR" href="./Pointers/Quiz/">Quiz</a><br>
+	│   │   └── <a class="NORM" href="./Pointers/Quiz/ptr_quiz1.c">ptr_quiz1.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/pointer1.c">pointer1.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/pointer_dereferencing.c">pointer_dereferencing.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/pointer_ex.c">pointer_ex.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/ptr_mult.c">ptr_mult.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/sigbus.c">sigbus.c</a><br>
+	│   ├── <a class="NORM" href="./Pointers/swap_ints.c">swap_ints.c</a><br>
+	│   └── <a class="NORM" href="./Pointers/un_init.c">un_init.c</a><br>
+	├── <a class="DIR" href="./Preprocessor/">Preprocessor</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/CompilationStages/">CompilationStages</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/CompilationStages/IntermediateOutput/">IntermediateOutput</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/CompilationStages/IntermediateOutput/hello.c">hello.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/CompilationStages/IntermediateOutput/hello.i">hello.i</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/CompilationStages/IntermediateOutput/hello.s">hello.s</a><br>
+	│   │   └── <a class="DIR" href="./Preprocessor/CompilationStages/Linking/">Linking</a><br>
+	│   │   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Preprocessor/CompilationStages/Linking/sqrt.c">sqrt.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/ConditionalCompile/">ConditionalCompile</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/0_comment.c">0_comment.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/1_nested_comment.c">1_nested_comment.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/2_ifdef.c">2_ifdef.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/define_change.c">define_change.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/define_change_cmd_line.c">define_change_cmd_line.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ConditionalCompile/log_pre.c">log_pre.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/ConditionalCompile/test_blank_macro.c">test_blank_macro.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/DefineConstants/">DefineConstants</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/built_in.c">built_in.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/built_in.i">built_in.i</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/built_in_pre.c">built_in_pre.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/circular_shift_builtin.c">circular_shift_builtin.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/define_max.c">define_max.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/define_max.i">define_max.i</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/define_max_pre.c">define_max_pre.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/DefineConstants/line_macro.c">line_macro.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/DefineConstants/simple_builtin.c">simple_builtin.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/ErrorWarning/">ErrorWarning</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ErrorWarning/error_warning.c">error_warning.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/ErrorWarning/hash_error.c">hash_error.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/ErrorWarning/test_error.c">test_error.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/HashAndHash/">HashAndHash</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/HashAndHash/function_def.c">function_def.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/HashAndHash/function_def.i">function_def.i</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/HashAndHash/function_def_without_macro.c">function_def_without_macro.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/HeaderUsage/">HeaderUsage</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/HeaderUsage/include/">include</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/HeaderUsage/include/sum.h">sum.h</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/HeaderUsage/src/">src</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/HeaderUsage/src/sum.c">sum.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/HeaderUsage/main.c">main.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/IncludePath/">IncludePath</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/IncludePath/stdio.h">stdio.h</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/IncludePath/test.c">test.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/IncludePath/test.i">test.i</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/IncludePath/test.s">test.s</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/Macros/">Macros</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/Macros/Quiz/">Quiz</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/Macros/Quiz/1_macro_test.c">1_macro_test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/Macros/Quiz/2_macro_test.c">2_macro_test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/Macros/Quiz/3_macro_test.c">3_macro_test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/Macros/Quiz/4_macro_test.c">4_macro_test.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/Macros/Quiz/5_macro_test.c">5_macro_test.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/Macros/Quiz/macro_test.c">macro_test.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/1_sum_macro.c">1_sum_macro.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/bit_operations.c">bit_operations.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/changes.diff">changes.diff</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/macro.c">macro.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/power_of_2.c">power_of_2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/simple_bitops2.c">simple_bitops2.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/simple_bitops.c">simple_bitops.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/swap_generic_macro.c">swap_generic_macro.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/swap_macro.c">swap_macro.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Macros/swap_macro_do_while.c">swap_macro_do_while.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/Macros/swap_nibble.c">swap_nibble.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/Quiz/">Quiz</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/Quiz/test1.c">test1.c</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/RedefinitionError/">RedefinitionError</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/RedefinitionError/ImproperHeaderExample/">ImproperHeaderExample</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/RedefinitionError/ImproperHeaderExample/display.h">display.h</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/RedefinitionError/ImproperHeaderExample/person.c">person.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/RedefinitionError/ImproperHeaderExample/person.h">person.h</a><br>
+	│   │   ├── <a class="DIR" href="./Preprocessor/RedefinitionError/ProperHeaderExample/">ProperHeaderExample</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/RedefinitionError/ProperHeaderExample/display.h">display.h</a><br>
+	│   │   │   ├── <a class="NORM" href="./Preprocessor/RedefinitionError/ProperHeaderExample/person.c">person.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Preprocessor/RedefinitionError/ProperHeaderExample/person.h">person.h</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/RedefinitionError/README">README</a><br>
+	│   ├── <a class="DIR" href="./Preprocessor/Undef/">Undef</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Undef/1_undef.c">1_undef.c</a><br>
+	│   │   ├── <a class="NORM" href="./Preprocessor/Undef/undef.c">undef.c</a><br>
+	│   │   └── <a class="NORM" href="./Preprocessor/Undef/undef_not.c">undef_not.c</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/hash_usage.c">hash_usage.c</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/stdio.h">stdio.h</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/str2.c">str2.c</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/stringize.c">stringize.c</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/test.c">test.c</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/test.i">test.i</a><br>
+	│   ├── <a class="NORM" href="./Preprocessor/test_pre.c">test_pre.c</a><br>
+	│   └── <a class="NORM" href="./Preprocessor/test.s">test.s</a><br>
+	├── <a class="DIR" href="./Quiz/">Quiz</a><br>
+	│   └── <a class="DIR" href="./Quiz/PracticeTest/">PracticeTest</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="DIR" href="./Quiz/PracticeTest/Solution/">Solution</a><br>
+	│   &nbsp;&nbsp;&nbsp; │   └── <a class="NORM" href="./Quiz/PracticeTest/Solution/base_10_to_n.c">base_10_to_n.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./Quiz/PracticeTest/programming_test_questions_c.txt">programming_test_questions_c.txt</a><br>
+	├── <a class="DIR" href="./Strings/">Strings</a><br>
+	│   ├── <a class="DIR" href="./Strings/ArrayOfStrings/">ArrayOfStrings</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/ArrayOfStrings/select_menu_2d.c">select_menu_2d.c</a><br>
+	│   │   └── <a class="NORM" href="./Strings/ArrayOfStrings/select_menu.c">select_menu.c</a><br>
+	│   ├── <a class="DIR" href="./Strings/ArrayVsPointer/">ArrayVsPointer</a><br>
+	│   │   └── <a class="NORM" href="./Strings/ArrayVsPointer/array_vs_ptr1.c">array_vs_ptr1.c</a><br>
+	│   ├── <a class="DIR" href="./Strings/Buggy/">Buggy</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/1_scanf_buffer.c">1_scanf_buffer.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/2_scanf_buffer_fixed.c">2_scanf_buffer_fixed.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/3_fgets_usage.c">3_fgets_usage.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/4_fets_implementation.c">4_fets_implementation.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/4_fets_implementation.s">4_fets_implementation.s</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Buggy/5_scanf_ptr.c">5_scanf_ptr.c</a><br>
+	│   │   └── <a class="NORM" href="./Strings/Buggy/6_scanf_ptr_valid_usage.c">6_scanf_ptr_valid_usage.c</a><br>
+	│   ├── <a class="DIR" href="./Strings/Builtin/">Builtin</a><br>
+	│   │   ├── <a class="DIR" href="./Strings/Builtin/CommonMistakes/">CommonMistakes</a><br>
+	│   │   │   └── <a class="NORM" href="./Strings/Builtin/CommonMistakes/builtin_demo.c">builtin_demo.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Builtin/builtin_demo.c">builtin_demo.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Builtin/strcpy_strcat.c">strcpy_strcat.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/Builtin/string_fns.c">string_fns.c</a><br>
+	│   │   └── <a class="NORM" href="./Strings/Builtin/strlen_builtin.c">strlen_builtin.c</a><br>
+	│   ├── <a class="DIR" href="./Strings/ProgramSegments/">ProgramSegments</a><br>
+	│   │   ├── <a class="DIR" href="./Strings/ProgramSegments/StorageClass/">StorageClass</a><br>
+	│   │   │   ├── <a class="DIR" href="./Strings/ProgramSegments/StorageClass/Demo1/">Demo1</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo1/average.c">average.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo1/main.c">main.c</a><br>
+	│   │   │   │   └── <a class="EXEC" href="./Strings/ProgramSegments/StorageClass/Demo1/program.exe">program.exe</a><br>
+	│   │   │   ├── <a class="DIR" href="./Strings/ProgramSegments/StorageClass/Demo2/">Demo2</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo2/average.c">average.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo2/foo.c">foo.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo2/main.c">main.c</a><br>
+	│   │   │   ├── <a class="DIR" href="./Strings/ProgramSegments/StorageClass/Demo3/">Demo3</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo3/average.c">average.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/Demo3/main.c">main.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/average.c">average.c</a><br>
+	│   │   │   └── <a class="NORM" href="./Strings/ProgramSegments/StorageClass/main.c">main.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/ProgramSegments/inner_scope.c">inner_scope.c</a><br>
+	│   │   ├── <a class="NORM" href="./Strings/ProgramSegments/segments_nm.c">segments_nm.c</a><br>
+	│   │   └── <a class="NORM" href="./Strings/ProgramSegments/variable_scope_lifetime.xls">variable_scope_lifetime.xls</a><br>
+	│   ├── <a class="NORM" href="./Strings/1_basics.c">1_basics.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/2_basics2.c">2_basics2.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/3_str_book_template.c">3_str_book_template.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/4_string_using_pointer.c">4_string_using_pointer.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/fgets.c">fgets.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/my_puts.c">my_puts.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/my_strcmp.c">my_strcmp.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/my_strcmp_solved.c">my_strcmp_solved.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/my_strlen.c">my_strlen.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/my_strlen_template.c">my_strlen_template.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/print_string.c">print_string.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/print_string_no_func.c">print_string_no_func.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/simple_str.c">simple_str.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/str_fn.c">str_fn.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/string_array.c">string_array.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/string_constant.c">string_constant.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/string_const.c">string_const.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/strlen.c">strlen.c</a><br>
+	│   ├── <a class="NORM" href="./Strings/strprob.c">strprob.c</a><br>
+	│   └── <a class="NORM" href="./Strings/test_strlen.c">test_strlen.c</a><br>
+	├── <a class="DIR" href="./UserDefined/">UserDefined</a><br>
+	│   ├── <a class="DIR" href="./UserDefined/BitFields/">BitFields</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/BitFields/1_bit_fields.c">1_bit_fields.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/BitFields/bit_fields.c">bit_fields.c</a><br>
+	│   │   └── <a class="NORM" href="./UserDefined/BitFields/bit_fields.s">bit_fields.s</a><br>
+	│   ├── <a class="DIR" href="./UserDefined/Enum/">Enum</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Enum/anon_enum.c">anon_enum.c</a><br>
+	│   │   └── <a class="NORM" href="./UserDefined/Enum/enum.c">enum.c</a><br>
+	│   ├── <a class="DIR" href="./UserDefined/StructExample/">StructExample</a><br>
+	│   │   ├── <a class="DIR" href="./UserDefined/StructExample/Example1/">Example1</a><br>
+	│   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/Example1/student.c">student.c</a><br>
+	│   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/Example1/student.h">student.h</a><br>
+	│   │   │   └── <a class="NORM" href="./UserDefined/StructExample/Example1/student_init.c">student_init.c</a><br>
+	│   │   ├── <a class="DIR" href="./UserDefined/StructExample/Example2/">Example2</a><br>
+	│   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/Example2/student.c">student.c</a><br>
+	│   │   │   └── <a class="NORM" href="./UserDefined/StructExample/Example2/student.h">student.h</a><br>
+	│   │   ├── <a class="DIR" href="./UserDefined/StructExample/StudentAverage/">StudentAverage</a><br>
+	│   │   │   ├── <a class="DIR" href="./UserDefined/StructExample/StudentAverage/BasicStudentInfo/">BasicStudentInfo</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/BasicStudentInfo/input.txt">input.txt</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/BasicStudentInfo/student.c">student.c</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/BasicStudentInfo/student.c.bak">student.c.bak</a><br>
+	│   │   │   │   └── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/BasicStudentInfo/student.h">student.h</a><br>
+	│   │   │   ├── <a class="DIR" href="./UserDefined/StructExample/StudentAverage/Task1/">Task1</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/Task1/input.txt">input.txt</a><br>
+	│   │   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/Task1/student.c">student.c</a><br>
+	│   │   │   │   └── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/Task1/student.h">student.h</a><br>
+	│   │   │   ├── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/student.c">student.c</a><br>
+	│   │   │   └── <a class="NORM" href="./UserDefined/StructExample/StudentAverage/student.h">student.h</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/1_student.c">1_student.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/2_student.c">2_student.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/3_un-named_struct.c">3_un-named_struct.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/classwork_student_info.doc">classwork_student_info.doc</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/data_align.c">data_align.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/dynamic_alloc.c">dynamic_alloc.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/StructExample/scanf.c">scanf.c</a><br>
+	│   │   └── <a class="NORM" href="./UserDefined/StructExample/struct_padding.c">struct_padding.c</a><br>
+	│   ├── <a class="DIR" href="./UserDefined/Typedef/">Typedef</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/2_student.c">2_student.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/bool_type.c">bool_type.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/func_ptr_typedef.c">func_ptr_typedef.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/test_typedef.c">test_typedef.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/typedef_array.c">typedef_array.c</a><br>
+	│   │   ├── <a class="NORM" href="./UserDefined/Typedef/typedef_int_array.c">typedef_int_array.c</a><br>
+	│   │   └── <a class="NORM" href="./UserDefined/Typedef/types.h">types.h</a><br>
+	│   └── <a class="DIR" href="./UserDefined/Union/">Union</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="DIR" href="./UserDefined/Union/Quiz/">Quiz</a><br>
+	│   &nbsp;&nbsp;&nbsp; │   └── <a class="NORM" href="./UserDefined/Union/Quiz/quiz1.c">quiz1.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./UserDefined/Union/1_union_muli_way_access.c">1_union_muli_way_access.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./UserDefined/Union/2_union_mem_overlap.c">2_union_mem_overlap.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./UserDefined/Union/endianess.c">endianess.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; ├── <a class="NORM" href="./UserDefined/Union/float_bits.c">float_bits.c</a><br>
+	│   &nbsp;&nbsp;&nbsp; └── <a class="NORM" href="./UserDefined/Union/network_packet.h">network_packet.h</a><br>
+	├── <a class="NORM" href="./generate_html.sh">generate_html.sh</a><br>
+	└── <a class="NORM" href="./index.html">index.html</a><br>
+	<br><br>
+	</p>
+	<p>
+
+137 directories, 643 files
+	<br><br>
+	</p>
+	<hr>
+	<p class="VERSION">
+		 tree v1.7.0 © 1996 - 2014 by Steve Baker and Thomas Moore <br>
+		 HTML output hacked and copyleft © 1998 by Francesc Rocher <br>
+		 JSON output hacked and copyleft © 2014 by Florian Sesser <br>
+		 Charsets / OS/2 support © 2001 by Kyosuke Tokoro
+	</p>
+</body>
+</html>

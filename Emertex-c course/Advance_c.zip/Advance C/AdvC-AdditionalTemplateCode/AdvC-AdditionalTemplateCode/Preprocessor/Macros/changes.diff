@@ -1,0 +1,34 @@
+4,5c4,9
+< #define SET_BIT(num) ((num) | 1)
+< #define CLEAR_BIT(num) ((num) & ~1)
+---
+> #define SET_BIT(num) (num = (num) | 1)
+> #define CLEAR_BIT(num) (num = (num) & ~1)
+> 
+> #define GET_NTH_BIT(num, pos) ((num >> pos) & 1)
+> #define SET_NTH_BIT(num, pos) (num = num | (1 << pos))
+> #define CLEAR_NTH_BIT(num, pos) (num = (num) & ~(1 << pos))
+16c20,32
+<     x = CLEAR_BIT(x);
+---
+>     CLEAR_BIT(x);
+>     printf("CLEAR x = %X\n", x);
+> 
+>     SET_BIT(x);
+>     printf("SET x = %X\n", x);
+> 
+>     CLEAR_BIT(x);
+>     printf("CLEAR x = %X\n", x);
+> 
+>     bit = GET_NTH_BIT(val, 2);
+>     printf("bit = %X\n", bit);
+> 
+>     CLEAR_NTH_BIT(x, 6);
+19c35
+<     x = SET_BIT(x);
+---
+>     SET_NTH_BIT(x, 6);
+22c38
+<     x = CLEAR_BIT(x);
+---
+>     CLEAR_NTH_BIT(x, 6);
