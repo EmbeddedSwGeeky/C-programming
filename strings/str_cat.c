@@ -24,6 +24,7 @@ void str_concatenate(char *str1, char *str2) {
 
 }
 
+
 void str_concate_ptr(char *str1, char *str2) {
 
     while(*(++str1));
