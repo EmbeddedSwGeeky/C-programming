@@ -11,7 +11,10 @@ void conv_str_to_up_case(char *str) {
 
     if(str == NULL) return;
 
-
+/** Ascii value A-65 --Z-90
+ * a-97--z-122
+ * always differnce 32 between chars
+ */
 
     for (int i = 0; str[i] != '\0'; i++)
     {
