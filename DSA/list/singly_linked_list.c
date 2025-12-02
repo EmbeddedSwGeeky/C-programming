@@ -17,8 +17,8 @@ struct node {
 
 /**
  * @brief THis gandles accepts data, try to create a node of that struct and returns pointer of struct node type
- * @param data 
- * @return struct node* 
+ * @param data
+ * @return struct node*
  */
 
 struct node* create_node(int data) {
